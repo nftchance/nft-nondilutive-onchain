@@ -234,10 +234,11 @@ describe("Non-Dilutive Token", () => {
         await contract.connect(mintSigner).focusGeneration(1, 1)
     });
 
+
     it('Validate token uri is unrevealed after generation 1 upgrade', async () => { 
         tokenUri = await contract.tokenURI(1);
         console.log('tokenUri: ', tokenUri);
-        assert.equal(tokenUri.includes(`data:application`), true);
+        assert.equal(tokenUri, "");
     });
 
     it("Can focus generation 0 after upgrading to generation 1", async () => { 
@@ -247,8 +248,9 @@ describe("Non-Dilutive Token", () => {
         
         await contract.connect(mintSigner).focusGeneration(0, 1)
 
+        console.log('tokenUri :', tokenUri);
         tokenUri = await contract.tokenURI(1);
-        assert.equal(tokenUri.includes(`ipfs://generation-zero/`), true);
+        assert.equal(tokenUri.includes(`data:application`), true);
     });
 
     it('Reveal generation 1 assets', async () => { 
@@ -263,7 +265,8 @@ describe("Non-Dilutive Token", () => {
         await contract.connect(mintSigner).focusGeneration(1, 1)
 
         tokenUri = await contract.tokenURI(1);
-        assert.equal(tokenUri.includes(`ipfs://generation-one/`), true);
+        console.log('tokenUri :', tokenUri);
+        assert.equal(tokenUri.includes(`data:application`), true);
     })
 
     it("Load generation 2", async () => { 
@@ -274,8 +277,16 @@ describe("Non-Dilutive Token", () => {
             true,
             '20000000000000000',
             0,
-            'ipfs://generation-two/'
+            cpws
         )
+
+        await contract.loadTraitType(2, 0, 'trait_one', traits[0]);
+        await contract.loadTraitType(2, 1, 'trait_two', traits[1]);
+        await contract.loadTraitType(2, 2, 'trait_three', traits[2]);
+        await contract.loadTraitType(2, 3, 'trait_four', traits[3]);
+        await contract.loadTraitType(2, 4, 'trait_five', traits[4]);
+        await contract.loadTraitType(2, 5, 'trait_six', traits[5]);
+        await contract.loadTraitType(2, 6, 'trait_seven', traits[6]);
 
         await contract.setRevealed(2, 500);
     });
@@ -288,7 +299,8 @@ describe("Non-Dilutive Token", () => {
         await contract.connect(mintSigner).focusGeneration(2, 1, { value: ethers.utils.parseEther("0.02")});
 
         tokenUri = await contract.tokenURI(1);
-        assert.equal(tokenUri.includes(`ipfs://generation-two/`), true);
+        console.log('tokenUri :', tokenUri);
+        assert.equal(tokenUri.includes(`data:application`), true);
     });
 
     it("Cannot downgrade from generation 2", async () => {
@@ -297,9 +309,6 @@ describe("Non-Dilutive Token", () => {
         var mintSigner = await ethers.getSigner(mintingAddress)
         
         await contract.connect(mintSigner).focusGeneration(1, 1).should.be.revertedWith('GenerationNotDowngradable')
-
-        tokenUri = await contract.tokenURI(1);
-        assert.equal(tokenUri.includes(`ipfs://generation-two/`), true);
     });
 
     it("Project owner cannot disable generation 2", async () => { 
