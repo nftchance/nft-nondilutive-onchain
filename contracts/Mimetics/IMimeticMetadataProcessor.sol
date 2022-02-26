@@ -18,5 +18,6 @@ interface IMimeticMetadataProcessor is IMimeticMetadataTrait {
         /// @dev metadata
         uint256[] cpws;
         Trait[][8] traitTypes;
+        string ipfsRendererHash;
     }
 }

@@ -33,6 +33,7 @@ interface IMimeticMetadata is IMimeticMetadataTrait {
         ,uint256 _cost                  // evolution availability
         ,uint256 _evolutionClosure      // evolution availability
         ,uint256[] calldata _cpws       // metadata
+        ,string memory ipfsRendererHash
     )
         external;
 

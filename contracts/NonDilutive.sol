@@ -54,17 +54,19 @@ contract NonDilutive is
         ,string memory _symbol
         ,uint256 _maxSupply
         ,uint256[] memory _cpws
+        ,string memory _ipfsRendererHash
     ) ERC721(_name, _symbol) {
         maxSupply = _maxSupply;
 
         loadGeneration(
-             0                  // layer
-            ,false              // enabled   (can be focused by holders)
-            ,true               // locked    (cannot be removed by project owner)
-            ,true               // sticky    (cannot be removed by owner)
-            ,0                  // cost      (does not cost to convert to or back to)
-            ,0                  // closure   (can be swapped to forever)
-            ,_cpws              // cpws
+             0                      // layer
+            ,false                  // enabled   (can be focused by holders)
+            ,true                   // locked    (cannot be removed by project owner)
+            ,true                   // sticky    (cannot be removed by owner)
+            ,0                      // cost      (does not cost to convert to or back to)
+            ,0                      // closure   (can be swapped to forever)
+            ,_cpws                  // cpws
+            ,_ipfsRendererHash      // the decentralized render engine used to assemble the art
         );
 
         _mint(msg.sender, 0);
@@ -90,7 +92,7 @@ contract NonDilutive is
             string memory
         ) 
     {
-        if(!super._exists(_tokenId)) revert TokenNonExistent();
+        if(!_exists(_tokenId)) revert TokenNonExistent();
         return _tokenURI(_tokenId);
     }
 
@@ -132,7 +134,7 @@ contract NonDilutive is
         payable
     {
         // Make sure the owner of the token is operating
-        if(super.ownerOf(_tokenId) != msg.sender) revert TokenOwnerMismatch();
+        if(ownerOf(_tokenId) != msg.sender) revert TokenOwnerMismatch();
 
         _focusGeneration(_layerId, _tokenId);
     }

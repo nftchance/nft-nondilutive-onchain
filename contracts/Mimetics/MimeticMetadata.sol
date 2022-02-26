@@ -60,6 +60,7 @@ contract MimeticMetadata is
         ,uint256 _cost                  // evolution availability
         ,uint256 _evolutionClosure      // evolution availability
         ,uint256[] memory _cpws
+        ,string memory _ipfsRendererHash
     )
         override 
         public 
@@ -84,7 +85,8 @@ contract MimeticMetadata is
         generation.top = 0;
 
         /// @dev metadata
-        generations[_layerId].cpws = _cpws;
+        generation.cpws = _cpws;
+        generation.ipfsRendererHash = _ipfsRendererHash;
     }
 
     /**
@@ -354,7 +356,9 @@ contract MimeticMetadata is
                             abi.encodePacked(
                                 '{"name": "Mimetic Metadata #'
                                 ,_tokenId.toString()
-                                ,'", "description": "Mimetic Metadata enables the on-chain evolution of NFT tokens.", "image": "ipfs://metadataHash/'
+                                ,'", "description": "Mimetic Metadata enables the on-chain evolution of NFT tokens.", "image": "ipfs://'
+                                ,generation.ipfsRendererHash
+                                ,'/'
                                 ,generationTokenId.toString()
                                 ,'", "attributes":'
                                 ,attributesString

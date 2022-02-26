@@ -34,7 +34,8 @@ describe("Non-Dilutive Token", () => {
             "Non-Dilutive",             // name
             "No-D",                     // symbol
             900,                        // max supply
-            cpws                        // base layer weights
+            cpws,                       // base layer weights
+            "generation-0"              // ipfs renderer hash
         );
 
         contract = await contract.deployed();
@@ -186,7 +187,8 @@ describe("Non-Dilutive Token", () => {
             false,
             0,
             0,
-            cpws
+            cpws,
+            "generation-1"
         )
 
         await contract.loadTraitType(1, 0, 'trait_one', traits[0]);
@@ -206,7 +208,8 @@ describe("Non-Dilutive Token", () => {
             false,
             0,
             0,
-            cpws
+            cpws,
+            "generation-1"
         ).should.be.revertedWith('GenerationAlreadyLoaded')
     });
 
@@ -277,7 +280,8 @@ describe("Non-Dilutive Token", () => {
             true,
             '20000000000000000',
             0,
-            cpws
+            cpws,
+            'generation-2'
         )
 
         await contract.loadTraitType(2, 0, 'trait_one', traits[0]);
