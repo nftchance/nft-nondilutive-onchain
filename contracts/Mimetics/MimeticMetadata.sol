@@ -290,14 +290,23 @@ contract MimeticMetadata is
             ,_tokenId
         );
 
-        string memory metadataString;
-        uint256 seed = getRandomNumber(generationTokenId);
+        string memory metadataString = string(
+            abi.encodePacked(
+                 '{"trait_value":"Generation","value": "'
+                ,tokenGeneration.toString()
+                ,'"},'
+            )
+        );
+
+        uint256 seed = getRandomNumber(
+             tokenGeneration
+            ,generationTokenId
+        );
 
         // Assemble the metadata of the token
         for(uint256 z; z < generation.cpws.length; z++) { 
             // Retrieve the trait
             uint256 shift = z * 8;
-             
 
             uint256 traitIndex = getRandomTrait(
                   generation.cpws[z]

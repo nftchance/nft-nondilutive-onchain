@@ -11,14 +11,6 @@ contract MimeticMetadataProcessor is
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
     /**
-     * @dev Hello friend, if you're reading this you may notice that your cpws are
-     *     dynamic. This means you can realistically push the bounds of gas. However,
-     *     doing so should not be done with the base. I love being a dev-maxi just
-     *     as much as the next person, but this codebase is beyond experimental.
-     *     Personal recommendation of 8 layer depth.
-     */
-
-    /**
      * @notice Generates a pseudo-random number with parameters that is hard for one entity to
      *        reasonably control.
      * @param _tokenId The token random number is being retrieved for
@@ -26,11 +18,21 @@ contract MimeticMetadataProcessor is
      */
 
     // TODO: Implement offset
-    function getRandomNumber(uint256 _tokenId) internal view returns (uint256) {
+    function getRandomNumber(
+         uint256 _generationId
+        ,uint256 _tokenId
+    ) 
+        internal 
+        pure 
+        returns (
+            uint256
+        ) 
+    {
         return uint256(
             keccak256(
                 abi.encodePacked(
-                    _tokenId
+                     _generationId
+                    ,_tokenId
                 )
             )
         );
