@@ -346,14 +346,6 @@ contract MimeticMetadata is
             }
         }
 
-        string memory dnaString = string(
-            abi.encodePacked(
-                 tokenGeneration.toString()
-                ,'|'
-                ,seed.toString()
-            )
-        );
-
         // Build finalized token metadata
         string memory attributesString = string(
             abi.encodePacked(
@@ -376,11 +368,11 @@ contract MimeticMetadata is
                                 ,'", "description": "Mimetic Metadata enables the on-chain evolution of NFT tokens. The Generation'
                                 ,tokenGeneration.toString()
                                 ,' DNA of your character is: '
-                                ,dnaString
+                                ,seed.toString()
                                 ,'","image":"ipfs://'
                                 ,generation.ipfsRendererHash
                                 ,'/?dna='
-                                ,dnaString
+                                ,seed.toString()
                                 ,'", "attributes":'
                                 ,attributesString
                                 ,'}'
