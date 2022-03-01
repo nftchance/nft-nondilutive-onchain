@@ -17,7 +17,6 @@ contract MimeticMetadataProcessor is
      * @return A pseudo-random uint256.
      */
 
-    // TODO: Implement offset
     function getRandomNumber(
          uint256 _generationId
         ,uint256 _tokenId

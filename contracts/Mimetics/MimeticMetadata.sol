@@ -231,30 +231,6 @@ contract MimeticMetadata is
     }
 
     /**
-     * @notice Allows users to calculate the metadata id that is associated with this token
-     *         at all times on any of the layers. This is not code that validates the input
-     *         as it operates like an internal function but has been exposed to holders
-     *         for UX purposes.
-     * @param _offset how far the ids have been shifted
-     * @param _tokenId the token we are getting the generational data for
-     */
-    function getGenerationToken(
-         uint256 _offset
-        ,uint256 _tokenId
-    ) 
-        override
-        public
-        virtual
-        view
-        returns (
-            uint256 generationTokenId
-        )
-    { 
-        generationTokenId = _tokenId + _offset - 1;
-        if (generationTokenId > maxSupply ) generationTokenId - maxSupply - 1;
-    }
-
-    /**
      * @notice Function that controls which metadata the token is currently utilizing.
      *         By default every token is using layer zero which is loaded during the time
      *         of contract deployment. Cannot be removed, is immutable, holders can always
@@ -282,14 +258,6 @@ contract MimeticMetadata is
         // if not revealed utilize placeholder initialized data
         if(_tokenId > generation.top) return "";
 
-        // Get shuffled token
-        // Make sure the baseTokenId is within the bounds of MAX_SUPPLY and fix if not
-        // Apply the generational offset to the tokens metadata
-        uint256 generationTokenId = getGenerationToken(
-             generation.offset
-            ,_tokenId
-        );
-
         string memory metadataString = string(
             abi.encodePacked(
                  '{"trait_value":"Generation","value": "'
@@ -300,7 +268,7 @@ contract MimeticMetadata is
 
         uint256 seed = getRandomNumber(
              tokenGeneration
-            ,generationTokenId
+            ,_tokenId
         );
 
         // Assemble the metadata of the token
@@ -365,7 +333,7 @@ contract MimeticMetadata is
                             abi.encodePacked(
                                 '{"name": "Mimetic Metadata #'
                                 ,_tokenId.toString()
-                                ,'", "description": "Mimetic Metadata enables the on-chain evolution of NFT tokens. The Generation'
+                                ,'", "description": "Mimetic Metadata enables the on-chain evolution of NFT tokens. The Generation '
                                 ,tokenGeneration.toString()
                                 ,' DNA of your character is: '
                                 ,seed.toString()
@@ -417,6 +385,9 @@ contract MimeticMetadata is
         internal
         virtual
     {
+        // TODO: Add the ability to limit focus of a generation if you have evolved to a whitelisted generation
+            // Should probably check if they've funded it yet
+
         uint256 activeGenerationLayer = tokenToGeneration[_tokenId]; 
         if(activeGenerationLayer == _layerId) revert GenerationNotDifferent();
         
